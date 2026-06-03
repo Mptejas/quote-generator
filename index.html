@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Quote Generator</title>
+</head>
+<body>
+
+<h1>Quote Generator</h1>
+
+<button onclick="getQuote()">Generate Quote</button>
+
+<p id="quote"></p>
+<p id="author"></p>
+
+<h2>History</h2>
+<ul id="history"></ul>
+
+<script>
+async function getQuote() {
+  const res = await fetch("http://127.0.0.1:5000/quote");
+  const data = await res.json();
+
+  document.getElementById("quote").innerText = data.quote;
+  document.getElementById("author").innerText = "- " + data.author;
+
+  loadHistory();
+}
+
+async function loadHistory() {
+  const res = await fetch("http://127.0.0.1:5000/history");
+  const data = await res.json();
+
+  const list = document.getElementById("history");
+  list.innerHTML = "";
+
+  data.forEach(item => {
+    const li = document.createElement("li");
+    li.innerText = item[0] + " - " + item[1];
+    list.appendChild(li);
+  });
+}
+</script>
+
+</body>
+</html>
